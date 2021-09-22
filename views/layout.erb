@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta name="description" content="Memo application you can share.">
+    <meta charset="UTF-8">
+    <meta name="robots" content="index, follow">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="/img/memo.ico">
+    <link rel="stylesheet" href="/css/style.css">
+    <title><%= settings.app_title %></title>
+  </head>
+
+  <body>
+    <div class="l-wrap">
+      <header class="l-header">
+       <div class="l-inner">
+          <div class="l-header__inner">
+            <a href="/" class="c-media">
+              <div class="c-media__img">
+                <img width="60px" height="60px" src="/img/post-it.jpg">
+              </div>
+              <p class="c-media__body">メモアプリ</p>
+            </a>
+            <div class="l-header__link">
+              <a href="/about">
+                <span>
+                  メモアプリについて
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="l-main">
+        <div class="l-inner">
+          <%= yield %>
+        </div>
+      </main>
+
+      <footer class="l-footer">
+        <small class="l-footer__copyright">&copy; 2021 keikosmile All Rights Reserved.</small>
+        </small>
+      </footer>
+
+    </div>
+  </body>
+</html>

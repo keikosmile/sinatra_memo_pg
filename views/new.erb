@@ -1,0 +1,42 @@
+<div class="c-section">
+  <div class="c-flex -center">
+    <h1 class="c-heading">メモ新規作成</h1>
+  </div>
+</div>
+
+<form action="/memos/new" method="post">
+
+  <div class="c-section">
+    <fieldset class="p-field -required">
+      <label class="c-label" for="title">
+        タイトル
+      </label>
+      <div class="c-unit">
+        <input class="c-input-text js-input-title" type="text" name="title" value="">
+      </div>
+      <div class="c-label-msg p-field__label-msg js-input-judge-title">
+        <p class="js-input-count-title">0</p>/30字
+      </div>
+    </fieldset>
+
+    <fieldset class="p-field">
+      <label class="c-label" for="body">
+        内容
+      </label>
+      <div class="c-unit">
+        <textarea class="c-textarea js-input-body" name="body" value=""></textarea>
+      </div>
+      <div class="c-label-msg p-field__label-msg js-input-judge-body">
+        <p class="js-input-count-body">0</p>/500字
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="c-section">
+    <div class="c-flex -center">
+      <input class="c-button js-input-btn" type="submit" value="メモ保存">
+    </div>
+  </div>
+
+</form>
+<script src="/js/input_limit.js"></script>

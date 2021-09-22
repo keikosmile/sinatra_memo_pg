@@ -1,0 +1,40 @@
+<div class="c-section">
+  <div class="c-flex -center">
+    <h1 class="c-heading">メモ一覧</h1>
+  </div>
+</div>
+
+<div class="c-section">
+  <table class="c-table">
+    <thead>
+      <tr>
+        <th>メモID</th>
+        <th>タイトル</th>
+        <th>内容</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% unless @memos.empty? %>
+        <% @memos.each do |memo_id, title_body| %>
+          <% title = title_body["title"] %>
+          <% body = title_body["body"] %>
+            <tr class="js-table-tbody-tr" data-href="/memos/<%= memo_id %>">
+              <td><%= memo_id[0, 8] %></td>
+              <td><%= h title %></td>
+              <td><%= h body %></td>
+            </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<script src="/js/table_click.js"></script>
+
+
+<form action="/memos/new" method="get">
+  <div class="c-section">
+    <div class="c-flex -center">
+      <input class="c-button" type="submit" value="メモ新規作成">
+    </div>
+  </div>
+</form>

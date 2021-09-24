@@ -8,64 +8,79 @@ require 'pg'
 class MemoDB
   class << self
     def create_table
-      conn = PG.connect(dbname: 'memo')
-      conn.exec("CREATE TABLE IF NOT EXISTS Memos
-        ( memo_id VARCHAR(36)  NOT NULL,
-          title   VARCHAR(30)  NOT NULL,
-          body    VARCHAR(500),
-          PRIMARY KEY (memo_id)
-        )")
-      conn.close
+      begin
+        conn = PG.connect(dbname: 'memo')
+        conn.exec("CREATE TABLE IF NOT EXISTS Memos
+          ( memo_id VARCHAR(36)  NOT NULL,
+            title   VARCHAR(30)  NOT NULL,
+            body    VARCHAR(500),
+            PRIMARY KEY (memo_id)
+          )")
+      ensure
+        conn.close if conn
+      end
     end
 
     def select(memo_id)
       memo = {}
-      conn = PG.connect(dbname: 'memo')
-      conn.exec("SELECT title, body FROM Memos WHERE memo_id = '#{memo_id}'") do |result|
-        result.each do |row|
-          memo["title"] = "#{row['title']}"
-          memo["body"] = "#{row['body']}"
+      begin
+        conn = PG.connect(dbname: 'memo')
+        conn.exec("SELECT title, body FROM Memos WHERE memo_id = '#{memo_id}'") do |result|
+          memo["title"] = "#{result[0]['title']}"
+          memo["body"] = "#{result[0]['body']}"
         end
+      ensure
+        conn.close if conn
       end
-      conn.close
       memo
     end
 
     def select_all
       memos = {}
-      conn = PG.connect(dbname: 'memo')
-      conn.exec("SELECT * FROM Memos") do |result|
-        result.each do |row|
-          memos["#{row['memo_id']}"] = {"title"=>"#{row['title']}", "body"=>"#{row['body']}"}
+      begin
+        conn = PG.connect(dbname: 'memo')
+        conn.exec("SELECT * FROM Memos") do |result|
+          result.each do |tuple|
+            memos["#{tuple['memo_id']}"] = {"title"=>"#{tuple['title']}", "body"=>"#{tuple['body']}"}
+          end
         end
+      ensure
+        conn.close if conn
       end
-      conn.close
       memos
     end
 
     def insert(title, body)
-      conn = PG.connect(dbname: 'memo')
-      conn.exec("INSERT INTO Memos (memo_id, title, body) VALUES ('#{SecureRandom.uuid}', '#{title}', '#{body}')")
-      conn.close
+      begin
+        conn = PG.connect(dbname: 'memo')
+        conn.exec("INSERT INTO Memos (memo_id, title, body) VALUES ('#{SecureRandom.uuid}', '#{title}', '#{body}')")
+      ensure
+        conn.close if conn
+      end
     end
 
     def delete(memo_id)
-      conn = PG.connect(dbname: 'memo')
-      conn.exec("DELETE FROM Memos WHERE memo_id = '#{memo_id}'")
-      conn.close
+      begin
+        conn = PG.connect(dbname: 'memo')
+        conn.exec("DELETE FROM Memos WHERE memo_id = '#{memo_id}'")
+      ensure
+        conn.close if conn
+      end
     end
 
     def update(memo_id, title, body)
-      conn = PG.connect(dbname: 'memo')
-      conn.exec("UPDATE Memos SET (title, body) = ('#{title}', '#{body}') WHERE memo_id = '#{memo_id}'")
-      conn.close
+      begin
+        conn = PG.connect(dbname: 'memo')
+        conn.exec("UPDATE Memos SET (title, body) = ('#{title}', '#{body}') WHERE memo_id = '#{memo_id}'")
+      ensure
+        conn.close if conn
+      end
     end
   end
 end
 
 configure do
   set :app_title, 'メモアプリ'
-  # FileUtils.touch(MemoDB::JSON_FILE) unless File.exist?(MemoDB::JSON_FILE)
   MemoDB.create_table
 end
 

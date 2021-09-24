@@ -2,50 +2,52 @@
 
 require 'sinatra'
 require 'sinatra/reloader'
-require 'json'
 require 'securerandom'
+require 'pg'
 
 class MemoDB
-  JSON_FILE = './database.json'
-
   class << self
-    def read_memos
-      memos = {}
-      memos = JSON.parse(File.read(JSON_FILE)) unless File.zero?(JSON_FILE)
-      memos
-    end
-
-    def write_memos(memos)
-      File.open(JSON_FILE, 'w') do |file|
-        JSON.dump(memos, file)
-      end
-    end
-
     def select(memo_id)
-      memos = MemoDB.read_memos
-      memos[memo_id]
+      memo = {}
+      conn = PG.connect(dbname: 'memo')
+      conn.exec("SELECT title, body FROM Memos WHERE memo_id = '#{memo_id}'") do |result|
+        result.each do |row|
+          memo["title"] = "#{row['title']}"
+          memo["body"] = "#{row['body']}"
+        end
+      end
+      conn.close
+      memo
     end
 
     def select_all
-      MemoDB.read_memos
+      memos = {}
+      conn = PG.connect(dbname: 'memo')
+      conn.exec("SELECT * FROM Memos") do |result|
+        result.each do |row|
+          memos["#{row['memo_id']}"] = {"title"=>"#{row['title']}", "body"=>"#{row['body']}"}
+        end
+      end
+      conn.close
+      memos
     end
 
     def insert(title, body)
-      memos = MemoDB.read_memos
-      memos[SecureRandom.uuid] = { 'title' => title, 'body' => body }
-      MemoDB.write_memos(memos)
+      conn = PG.connect(dbname: 'memo')
+      conn.exec("INSERT INTO Memos (memo_id, title, body) VALUES ('#{SecureRandom.uuid}', '#{title}', '#{body}')")
+      conn.close
     end
 
     def delete(memo_id)
-      memos = MemoDB.read_memos
-      memos.delete(memo_id)
-      MemoDB.write_memos(memos)
+      conn = PG.connect(dbname: 'memo')
+      conn.exec("DELETE FROM Memos WHERE memo_id = '#{memo_id}'")
+      conn.close
     end
 
     def update(memo_id, title, body)
-      memos = MemoDB.read_memos
-      memos[memo_id] = { 'title' => title, 'body' => body }
-      MemoDB.write_memos(memos)
+      conn = PG.connect(dbname: 'memo')
+      conn.exec("UPDATE Memos SET (title, body) = ('#{title}', '#{body}') WHERE memo_id = '#{memo_id}'")
+      conn.close
     end
   end
 end

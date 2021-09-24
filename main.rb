@@ -54,7 +54,15 @@ end
 
 configure do
   set :app_title, 'メモアプリ'
-  FileUtils.touch(MemoDB::JSON_FILE) unless File.exist?(MemoDB::JSON_FILE)
+  # FileUtils.touch(MemoDB::JSON_FILE) unless File.exist?(MemoDB::JSON_FILE)
+  conn = PG.connect(dbname: 'memo')
+  conn.exec("CREATE TABLE IF NOT EXISTS Memos
+    ( memo_id VARCHAR(36)  NOT NULL,
+      title   VARCHAR(30)  NOT NULL,
+      body    VARCHAR(500),
+      PRIMARY KEY (memo_id)
+    )")
+  conn.close
 end
 
 helpers do

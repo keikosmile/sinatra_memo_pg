@@ -23,18 +23,6 @@
         - `CREATE DATABASE memo;`
     3. postgresデータベースから切断する
         - `\q`
-4. memoデータベースに接続する
-    - `psql -d memo`
-5. Memosテーブルを作成する
-    - ```SQL
-      CREATE TABLE Memos
-      ( memo_id VARCHAR(36)  NOT NULL,
-        title   VARCHAR(30)  NOT NULL,
-        body    VARCHAR(500),
-        PRIMARY KEY (memo_id));
-      ```
-6. memoデータベースから切断する
-    - `\q`
 ### 2. ファイルをダウンロードする
 -  ファイル構成
     - public/

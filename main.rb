@@ -10,12 +10,13 @@ class MemoDB
     def create_table
       begin
         conn = PG.connect(dbname: 'memo')
-        conn.exec("CREATE TABLE IF NOT EXISTS Memos
-          ( memo_id VARCHAR(36)  NOT NULL,
-            title   VARCHAR(30)  NOT NULL,
-            body    VARCHAR(500),
-            PRIMARY KEY (memo_id)
-          )")
+        sql = "CREATE TABLE IF NOT EXISTS Memos
+                ( memo_id VARCHAR(36)  NOT NULL,
+                  title   VARCHAR(30)  NOT NULL,
+                  body    VARCHAR(500),
+                  PRIMARY KEY (memo_id)
+                )"
+        conn.exec(sql)
       ensure
         conn.close if conn
       end
@@ -25,7 +26,8 @@ class MemoDB
       memo = {}
       begin
         conn = PG.connect(dbname: 'memo')
-        conn.exec("SELECT title, body FROM Memos WHERE memo_id = '#{memo_id}'") do |result|
+        sql = "SELECT title, body FROM Memos WHERE memo_id = '#{memo_id}'"
+        conn.exec(sql) do |result|
           memo["title"] = "#{result[0]['title']}"
           memo["body"] = "#{result[0]['body']}"
         end
@@ -39,7 +41,8 @@ class MemoDB
       memos = {}
       begin
         conn = PG.connect(dbname: 'memo')
-        conn.exec("SELECT * FROM Memos") do |result|
+        sql = "SELECT * FROM Memos"
+        conn.exec(sql) do |result|
           result.each do |tuple|
             memos["#{tuple['memo_id']}"] = {"title"=>"#{tuple['title']}", "body"=>"#{tuple['body']}"}
           end
@@ -53,7 +56,8 @@ class MemoDB
     def insert(title, body)
       begin
         conn = PG.connect(dbname: 'memo')
-        conn.exec("INSERT INTO Memos (memo_id, title, body) VALUES ('#{SecureRandom.uuid}', '#{title}', '#{body}')")
+        sql = "INSERT INTO Memos (memo_id, title, body) VALUES ('#{SecureRandom.uuid}', '#{title}', '#{body}')"
+        conn.exec(sql)
       ensure
         conn.close if conn
       end
@@ -62,7 +66,8 @@ class MemoDB
     def delete(memo_id)
       begin
         conn = PG.connect(dbname: 'memo')
-        conn.exec("DELETE FROM Memos WHERE memo_id = '#{memo_id}'")
+        sql = "DELETE FROM Memos WHERE memo_id = '#{memo_id}'"
+        conn.exec(sql)
       ensure
         conn.close if conn
       end
@@ -71,7 +76,8 @@ class MemoDB
     def update(memo_id, title, body)
       begin
         conn = PG.connect(dbname: 'memo')
-        conn.exec("UPDATE Memos SET (title, body) = ('#{title}', '#{body}') WHERE memo_id = '#{memo_id}'")
+        sql = "UPDATE Memos SET (title, body) = ('#{title}', '#{body}') WHERE memo_id = '#{memo_id}'"
+        conn.exec(sql)
       ensure
         conn.close if conn
       end

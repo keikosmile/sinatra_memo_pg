@@ -11,76 +11,58 @@ class MemoDB
 
   class << self
     def create_table
-      begin
-        conn = PG.connect(dbname: DATABASE)
-        sql = "CREATE TABLE IF NOT EXISTS #{TABLE}
-                ( memo_id VARCHAR(36)  NOT NULL,
-                  title   VARCHAR(30)  NOT NULL,
-                  body    VARCHAR(500),
-                  PRIMARY KEY (memo_id)
-                )"
-        conn.exec(sql)
-      ensure
-        conn.close if conn
-      end
+      conn = PG.connect(dbname: DATABASE)
+      sql = "CREATE TABLE IF NOT EXISTS #{TABLE}
+              ( memo_id VARCHAR(36)  NOT NULL,
+                title   VARCHAR(30)  NOT NULL,
+                body    VARCHAR(500),
+                PRIMARY KEY (memo_id)
+              )"
+      conn.exec(sql)
+      conn&.close
     end
 
     def select(memo_id)
-      begin
-        conn = PG.connect(dbname: DATABASE)
-        sql = "SELECT title, body FROM #{TABLE} WHERE memo_id = $1"
-        result = conn.exec_params(sql, [memo_id])
-      ensure
-        conn.close if conn
-      end
+      conn = PG.connect(dbname: DATABASE)
+      sql = "SELECT title, body FROM #{TABLE} WHERE memo_id = $1"
+      result = conn.exec_params(sql, [memo_id])
+      conn&.close
       result[0]
     end
 
     def select_all
       memos = {}
-      begin
-        conn = PG.connect(dbname: DATABASE)
-        sql = "SELECT * FROM #{TABLE}"
-        result = conn.exec(sql)
-        result.each do |tuple|
-          memos[tuple['memo_id']] = {"title"=>tuple['title'], "body"=>tuple['body']}
-        end
-      ensure
-        conn.close if conn
+      conn = PG.connect(dbname: DATABASE)
+      sql = "SELECT * FROM #{TABLE}"
+      result = conn.exec(sql)
+      result.each do |tuple|
+        memos[tuple['memo_id']] = { 'title' => tuple['title'], 'body' => tuple['body'] }
       end
+      conn&.close
       memos
     end
 
     def insert(title, body)
-      begin
-        conn = PG.connect(dbname: DATABASE)
-        sql = "INSERT INTO #{TABLE} (memo_id, title, body) VALUES ($1, $2, $3)"
-        conn.prepare('statement', sql)
-        conn.exec_prepared('statement', [SecureRandom.uuid, title, body])
-      ensure
-        conn.close if conn
-      end
+      conn = PG.connect(dbname: DATABASE)
+      sql = "INSERT INTO #{TABLE} (memo_id, title, body) VALUES ($1, $2, $3)"
+      conn.prepare('statement', sql)
+      conn.exec_prepared('statement', [SecureRandom.uuid, title, body])
+      conn&.close
     end
 
     def delete(memo_id)
-      begin
-        conn = PG.connect(dbname: DATABASE)
-        sql = "DELETE FROM #{TABLE} WHERE memo_id = $1"
-        conn.exec_params(sql, [memo_id])
-      ensure
-        conn.close if conn
-      end
+      conn = PG.connect(dbname: DATABASE)
+      sql = "DELETE FROM #{TABLE} WHERE memo_id = $1"
+      conn.exec_params(sql, [memo_id])
+      conn&.close
     end
 
     def update(memo_id, title, body)
-      begin
-        conn = PG.connect(dbname: DATABASE)
-        sql = "UPDATE #{TABLE} SET (title, body) = ($1, $2) WHERE memo_id = $3"
-        conn.prepare('statement', sql)
-        conn.exec_prepared('statement', [title, body, memo_id])
-      ensure
-        conn.close if conn
-      end
+      conn = PG.connect(dbname: DATABASE)
+      sql = "UPDATE #{TABLE} SET (title, body) = ($1, $2) WHERE memo_id = $3"
+      conn.prepare('statement', sql)
+      conn.exec_prepared('statement', [title, body, memo_id])
+      conn&.close
     end
   end
 end

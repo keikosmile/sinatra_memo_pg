@@ -6,17 +6,23 @@
 
 <div class="c-section">
   <fieldset class="p-field">
-    <label class="c-label for="memo_id">メモID</label>
+    <div class="c-label for="memo_id">
+      メモID
+    </div>
     <p class="c-sentence"><%= @memo_id %></p>
   </fieldset>
 
   <fieldset class="p-field">
-    <label class="c-label for="title">タイトル</label>
+    <div class="c-label for="title">
+      タイトル
+    </div>
     <p class="c-sentence"><%= h @memo["title"] %></p>
   </fieldset>
 
   <fieldset class="p-field">
-    <label class="c-label for="body">内容</label>
+    <div class="c-label for="body">
+      内容
+    </div>
     <p class="c-sentence"><%= h @memo["body"] %></p>
   </fieldset>
 </div>

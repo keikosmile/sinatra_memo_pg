@@ -6,7 +6,9 @@
 
 <div class="c-section">
   <fieldset class="p-field">
-    <label class="c-label for="memo_id">メモID</label>
+    <div class="c-label for="memo_id">
+      メモID
+    </div>
     <p class="c-sentence"><%= @memo_id %></p>
   </fieldset>
 </div>
@@ -14,9 +16,9 @@
 <form action="/memos/<%= @memo_id %>" method="post">
   <div class="c-section">
     <fieldset class="p-field -required">
-      <label class="c-label" for="title">
+      <div class="c-label" for="title">
         タイトル
-      </label>
+      </div>
       <div class="c-unit">
         <input class="c-input-text js-input-title" type="text" name="title" value="<%= @memo["title"] %>">
       </div>
@@ -26,9 +28,9 @@
     </fieldset>
 
     <fieldset class="p-field">
-      <label class="c-label" for="body">
+      <div class="c-label" for="body">
         内容
-      </label>
+      </div>
       <div class="c-unit">
         <textarea class="c-textarea js-input-body" name="body"><%= @memo["body"] %></textarea>
       </div>

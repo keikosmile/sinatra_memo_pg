@@ -2,7 +2,6 @@
 
 require 'sinatra'
 require 'sinatra/reloader'
-require 'securerandom'
 require 'pg'
 
 class MemoDB
@@ -32,7 +31,7 @@ class MemoDB
     def select_all
       memos = {}
       conn = PG.connect(dbname: DATABASE)
-      sql = 'SELECT * FROM Memos'
+      sql = 'SELECT * FROM Memos ORDER BY memo_id'
       result = conn.exec(sql)
       result.each do |tuple|
         memos[tuple['memo_id']] = { 'title' => tuple['title'], 'body' => tuple['body'] }

@@ -12,7 +12,7 @@ class MemoDB
     def create_table
       conn = PG.connect(dbname: DATABASE)
       sql = 'CREATE TABLE IF NOT EXISTS Memos
-              ( memo_id VARCHAR(36)  NOT NULL,
+              ( memo_id SERIAL,
                 title   VARCHAR(30)  NOT NULL,
                 body    VARCHAR(500),
                 PRIMARY KEY (memo_id)
@@ -43,9 +43,9 @@ class MemoDB
 
     def insert(title, body)
       conn = PG.connect(dbname: DATABASE)
-      sql = 'INSERT INTO Memos (memo_id, title, body) VALUES ($1, $2, $3)'
+      sql = 'INSERT INTO Memos (title, body) VALUES ($1, $2)'
       conn.prepare('statement', sql)
-      conn.exec_prepared('statement', [SecureRandom.uuid, title, body])
+      conn.exec_prepared('statement', [title, body])
       conn&.close
     end
 

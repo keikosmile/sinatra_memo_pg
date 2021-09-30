@@ -3,9 +3,9 @@
 require 'sinatra'
 require 'sinatra/reloader'
 require 'pg'
-require './memo_db.rb'
+require './memo_db'
 
-memoDB = MemoDB.new('memo')
+memo_db = MemoDB.new('memo')
 
 configure do
   set :app_title, 'メモアプリ'
@@ -18,7 +18,7 @@ helpers do
 end
 
 get '/' do
-  @memos = memoDB.select_all
+  @memos = memo_db.select_all
   erb :index
 end
 
@@ -27,29 +27,29 @@ get '/memos/new' do
 end
 
 post '/memos/new' do
-  memoDB.insert(params[:title], params[:body])
+  memo_db.insert(params[:title], params[:body])
   redirect '/'
 end
 
 get '/memos/:memo_id' do
   @memo_id = params[:memo_id]
-  @memo = memoDB.select(@memo_id)
+  @memo = memo_db.select(@memo_id)
   erb :detail
 end
 
 delete '/memos/:memo_id' do
-  memoDB.delete(params[:memo_id])
+  memo_db.delete(params[:memo_id])
   redirect '/'
 end
 
 get '/memos/:memo_id/edit' do
   @memo_id = params[:memo_id]
-  @memo = memoDB.select(@memo_id)
+  @memo = memo_db.select(@memo_id)
   erb :edit
 end
 
 patch '/memos/:memo_id' do
-  memoDB.update(params[:memo_id], params[:title], params[:body])
+  memo_db.update(params[:memo_id], params[:title], params[:body])
   redirect '/'
 end
 

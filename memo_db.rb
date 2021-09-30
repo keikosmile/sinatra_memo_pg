@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class MemoDB
   def initialize(database)
     @conn = PG.connect(dbname: database)

@@ -13,7 +13,7 @@ class MemoDB
 
   def create_table
     sql = 'CREATE TABLE IF NOT EXISTS memos
-          ( id SERIAL,
+          ( id      SERIAL,
             title   VARCHAR(30)  NOT NULL,
             body    VARCHAR(500),
             PRIMARY KEY (id)
@@ -28,13 +28,13 @@ class MemoDB
   end
 
   def select_all
-    memos = {}
+    # memos = {}
     sql = 'SELECT * FROM memos ORDER BY id'
     result = @conn.exec(sql)
-    result.each do |tuple|
-      memos[tuple['id']] = { 'title' => tuple['title'], 'body' => tuple['body'] }
+    result.to_h do |tuple|
+      [tuple['id'], { 'title' => tuple['title'], 'body' => tuple['body'] }]
     end
-    memos
+    # memos
   end
 
   def insert(title, body)

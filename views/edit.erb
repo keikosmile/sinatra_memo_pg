@@ -6,14 +6,14 @@
 
 <div class="c-section">
   <fieldset class="p-field">
-    <div class="c-label for="memo_id">
+    <div class="c-label for="id">
       メモID
     </div>
-    <p class="c-sentence"><%= @memo_id %></p>
+    <p class="c-sentence"><%= @id %></p>
   </fieldset>
 </div>
 
-<form action="/memos/<%= @memo_id %>" method="post">
+<form action="/memos/<%= @id %>" method="post">
   <div class="c-section">
     <fieldset class="p-field -required">
       <div class="c-label" for="title">

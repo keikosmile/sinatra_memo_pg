@@ -3,7 +3,7 @@
 require 'sinatra'
 require 'sinatra/reloader'
 require 'pg'
-require './memo_db'
+require_relative 'memo_db'
 
 memo_db = MemoDB.new('memo')
 
@@ -31,25 +31,25 @@ post '/memos/new' do
   redirect '/'
 end
 
-get '/memos/:memo_id' do
-  @memo_id = params[:memo_id]
-  @memo = memo_db.select(@memo_id)
+get '/memos/:id' do
+  @id = params[:id]
+  @memo = memo_db.select(@id)
   erb :detail
 end
 
-delete '/memos/:memo_id' do
-  memo_db.delete(params[:memo_id])
+delete '/memos/:id' do
+  memo_db.delete(params[:id])
   redirect '/'
 end
 
-get '/memos/:memo_id/edit' do
-  @memo_id = params[:memo_id]
-  @memo = memo_db.select(@memo_id)
+get '/memos/:id/edit' do
+  @id = params[:id]
+  @memo = memo_db.select(@id)
   erb :edit
 end
 
-patch '/memos/:memo_id' do
-  memo_db.update(params[:memo_id], params[:title], params[:body])
+patch '/memos/:id' do
+  memo_db.update(params[:id], params[:title], params[:body])
   redirect '/'
 end
 

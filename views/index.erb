@@ -15,11 +15,11 @@
     </thead>
     <tbody>
       <% unless @memos.empty? %>
-        <% @memos.each do |memo_id, title_body| %>
+        <% @memos.each do |id, title_body| %>
           <% title = title_body["title"] %>
           <% body = title_body["body"] %>
-            <tr class="js-table-tbody-tr" data-href="/memos/<%= memo_id %>">
-              <td><%= memo_id[0, 8] %></td>
+            <tr class="js-table-tbody-tr" data-href="/memos/<%= id %>">
+              <td><%= id[0, 8] %></td>
               <td><%= h title %></td>
               <td><%= h body %></td>
             </tr>

@@ -6,7 +6,7 @@
 
 <div class="c-section">
   <fieldset class="p-field">
-    <div class="c-label for="id">
+    <div class="c-label">
       メモID
     </div>
     <p class="c-sentence"><%= @id %></p>
@@ -16,11 +16,11 @@
 <form action="/memos/<%= @id %>" method="post">
   <div class="c-section">
     <fieldset class="p-field -required">
-      <div class="c-label" for="title">
+      <label class="c-label" for="title">
         タイトル
-      </div>
+      </label>
       <div class="c-unit">
-        <input class="c-input-text js-input-title" type="text" name="title" value="<%= @memo["title"] %>">
+        <input class="c-input-text js-input-title" type="text" name="title" id="title" value="<%= @memo["title"] %>">
       </div>
       <div class="c-label-msg p-field__label-msg js-input-judge-title">
         <p class="js-input-count-title">0</p>/30字
@@ -28,11 +28,11 @@
     </fieldset>
 
     <fieldset class="p-field">
-      <div class="c-label" for="body">
+      <label class="c-label" for="body">
         内容
-      </div>
+      </label>
       <div class="c-unit">
-        <textarea class="c-textarea js-input-body" name="body"><%= @memo["body"] %></textarea>
+        <textarea class="c-textarea js-input-body" name="body" id="body"><%= @memo["body"] %></textarea>
       </div>
       <div class="c-label-msg p-field__label-msg js-input-judge-body">
         <p class="js-input-count-body">0</p>/500字

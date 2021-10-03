@@ -4,11 +4,11 @@ class MemoDB
   def initialize(database)
     @conn = PG.connect(dbname: database)
     create_table
-  end
-
-  def deallocate_statement
-    sql = 'DEALLOCATE ALL'
-    @conn.exec(sql)
+    @conn.prepare('select_statement', 'SELECT title, body FROM memos WHERE id = $1')
+    @conn.prepare('select_all_statement', 'SELECT * FROM memos ORDER BY id')
+    @conn.prepare('insert_statement', 'INSERT INTO memos (title, body) VALUES ($1, $2)')
+    @conn.prepare('delete_statement', 'DELETE FROM memos WHERE id = $1')
+    @conn.prepare('update_statement', 'UPDATE memos SET (title, body) = ($1, $2) WHERE id = $3')
   end
 
   def create_table
@@ -22,37 +22,26 @@ class MemoDB
   end
 
   def select(id)
-    sql = 'SELECT title, body FROM memos WHERE id = $1'
-    result = @conn.exec_params(sql, [id])
-    result[0]
+    result = @conn.exec_prepared('select_statement', [id])
+    result.first
   end
 
   def select_all
-    # memos = {}
-    sql = 'SELECT * FROM memos ORDER BY id'
-    result = @conn.exec(sql)
+    result = @conn.exec_prepared('select_all_statement')
     result.to_h do |tuple|
       [tuple['id'], { 'title' => tuple['title'], 'body' => tuple['body'] }]
     end
-    # memos
   end
 
   def insert(title, body)
-    sql = 'INSERT INTO memos (title, body) VALUES ($1, $2)'
-    deallocate_statement
-    @conn.prepare('statement', sql)
-    @conn.exec_prepared('statement', [title, body])
+    @conn.exec_prepared('insert_statement', [title, body])
   end
 
   def delete(id)
-    sql = 'DELETE FROM memos WHERE id = $1'
-    @conn.exec_params(sql, [id])
+    @conn.exec_prepared('delete_statement', [id])
   end
 
   def update(id, title, body)
-    sql = 'UPDATE memos SET (title, body) = ($1, $2) WHERE id = $3'
-    deallocate_statement
-    @conn.prepare('statement', sql)
-    @conn.exec_prepared('statement', [title, body, id])
+    @conn.exec_prepared('update_statement', [title, body, id])
   end
 end

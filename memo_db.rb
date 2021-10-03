@@ -12,12 +12,14 @@ class MemoDB
   end
 
   def create_table
-    sql = 'CREATE TABLE IF NOT EXISTS memos
-          ( id      SERIAL,
-            title   VARCHAR(30)  NOT NULL,
-            body    VARCHAR(500),
-            PRIMARY KEY (id)
-          )'
+    sql = <<~SQL
+      CREATE TABLE IF NOT EXISTS memos
+      ( id      SERIAL,
+        title   VARCHAR(30)  NOT NULL,
+        body    VARCHAR(500),
+        PRIMARY KEY (id)
+      )
+    SQL
     @conn.exec(sql)
   end
 

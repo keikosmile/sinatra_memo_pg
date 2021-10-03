@@ -6,17 +6,23 @@
 
 <div class="c-section">
   <fieldset class="p-field">
-    <label class="c-label for="memo_id">メモID</label>
-    <p class="c-sentence"><%= @memo_id %></p>
+    <div class="c-label">
+      メモID
+    </div>
+    <p class="c-sentence"><%= @id %></p>
   </fieldset>
 
   <fieldset class="p-field">
-    <label class="c-label for="title">タイトル</label>
+    <div class="c-label">
+      タイトル
+    </div>
     <p class="c-sentence"><%= h @memo["title"] %></p>
   </fieldset>
 
   <fieldset class="p-field">
-    <label class="c-label for="body">内容</label>
+    <div class="c-label">
+      内容
+    </div>
     <p class="c-sentence"><%= h @memo["body"] %></p>
   </fieldset>
 </div>
@@ -24,12 +30,12 @@
 <div class="c-section">
   <div class="c-flex -center">
     <div class="c-button--horizontal">
-      <form action="/memos/<%= @memo_id %>/edit" method="get">
+      <form action="/memos/<%= @id %>/edit" method="get">
         <input class="c-button" type="submit" value="メモ変更">
       </form>
     </div>
     <div class="c-button--horizontal">
-      <form action="/memos/<%= @memo_id %>" method="post">
+      <form action="/memos/<%= @id %>" method="post">
         <input type="hidden" name="_method" value="DELETE">
         <input class="c-button" type="submit" value="メモ削除">
       </form>

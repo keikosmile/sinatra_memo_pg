@@ -1,46 +1,73 @@
-# sinatra_memo メモアプリ
+# sinatra_memo_pg メモアプリ pg編
 ## 【概要】
 ![](public/img/README_.png)
 メモをネット上で共有するためのアプリです。
 
-## 【ローカルで メモアプリ を立ち上げるための手順】
+## 【環境】
+- Ruby 3.0.1
+## 【ローカルのPCで メモアプリ を立ち上げるための手順】
 
-### 1. ファイルをダウンロードする
-#### ファイル構成
-- public/
-  - css/
-      - style.css
-  - img/
-      - memo.ico
-      - post-it.jpg
-      - READEME_.png
-  - js/
-      - input_limit.js
-      - table_click.js
-- views/
-  - about.erb
-  - detail.erb
-  - edit.erb
-  - error.erb
-  - index.erb
-  - layout.erb
-  - new.erb
-- .gitignore
-- .rubocop.yml
-- database.json (初めてWebアプリケーションを実行後、作成される)
-- Gemfile
-- Gemfile.lock
-- main.rb
-- README.md
+### 1. ローカルのPCでpostgreSQLを準備する
+1. postgreSQLをインストールする
+    - macOSの場合
+        - `brew install postgresql`
+    - linuxの場合
+        - `sudo apt install postgresql`
+2. postgreSQLを起動する
+    - macOSの場合
+        - `brew services start postgresql`
+    - linuxの場合
+        - `sudo service postgresql start`
+3. memoデータベースを作成する
+    1. インストール時に自動的に作成された postgresデータベースに接続する
+        - `psql -d postgres`
+    2. memoデータベースを作成する
+        - `CREATE DATABASE memo;`
+    3. postgresデータベースから切断する
+        - `\q`
+### 2. ファイルをダウンロードする
+-  ファイル構成
+    - public/
+      - css/
+          - style.css
+      - img/
+          - memo.ico
+          - post-it.jpg
+          - READEME_.png
+      - js/
+          - input_limit.js
+          - table_click.js
+    - views/
+      - about.erb
+      - detail.erb
+      - edit.erb
+      - error.erb
+      - index.erb
+      - layout.erb
+      - new.erb
+    - .gitignore
+    - .rubocop.yml
+    - Gemfile
+    - Gemfile.lock
+    - main.rb
+    - memo_db.rb
+    - README.md
 
-### 2. gem をインストールする
-`bundle install`
+### 3. gem をインストールする
+- `bundle install`
 
-### 3. Webアプリケーションを起動する
-`bundle exec ruby main.rb`
+### 4. Webアプリケーションを起動する
+- `bundle exec ruby main.rb`
 
-### 4. ブラウザで下記にアクセスする
-http://localhost:4567
+### 5. ブラウザで下記にアクセスする
+- http://localhost:4567
 
-### 5. 実行中のWebアプリケーションを停止する
-ターミナルで、Ctrl-C
+## 【ローカルのPCで メモアプリ を停止する手順】
+### 1. 実行中のWebアプリケーションを停止する
+- ターミナルで、Ctrl-C
+### 2. postgreSQLを停止する
+- macOSの場合
+    - `brew services stop postgresql`
+- linuxの場合
+    - `sudo service postgresql stop`
+
